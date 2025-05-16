@@ -11,7 +11,7 @@ pipeline {
         OC_TOKEN = credentials('kingopenshift-id')  // Jenkins credentials
         OC_SERVER = "https://api.rm1.0a51.p1.openshiftapps.com:6443"
         PROJECT = "kekuda-king-dev"
-        IMAGE = "molacon/paas:latest"
+        IMAGE_NAME = "molacon/paas:latest"
         APP_NAME = "web-terminal-tooling"
         APP_DEPLOYMENT = "workspace62e89aa8716c4c83"
     }
@@ -28,28 +28,28 @@ pipeline {
         // stage('Deploy Application') {
         //     steps {
         //         script {
-        //             OpenShiftHelper.deploy(this, PROJECT, IMAGE, APP_NAME)
+        //             OpenShiftHelper.deploy(this, PROJECT, IMAGE_NAME, APP_NAME)
         //         }
         //     }
         // }
-        // stage('Trivy Security Scan') {
+        stage('Trivy Security Scan') {
  
-        //                                 steps {
+                                        steps {
  
-        //                                     sh '''
-        //                                     sudo docker run --rm \
-        //                                     -v /var/run/docker.sock:/var/run/docker.sock \
-        //                                     -v $PWD:/root/reports \
-        //                                     aquasec/trivy image \
-        //                                     --format template \
-        //                                     --template "@/contrib/html.tpl" \
-        //                                     -o /root/reports/trivy-report.html \
-        //                                     ${IMAGE}
-        //                                     '''
+                                            sh '''
+                                            sudo docker run --rm \
+                                            -v /var/run/docker.sock:/var/run/docker.sock \
+                                            -v $PWD:/root/reports \
+                                            aquasec/trivy image \
+                                            --format template \
+                                            --template "@/contrib/html.tpl" \
+                                            -o /root/reports/trivy-report.html \
+                                            ${IMAGE_NAME}
+                                            '''
  
-        //                                 }
+                                        }
  
-        //                             }
+                                    }
         //                             stage('Publish Trivy Report') {
  
         //                                 steps {
@@ -71,7 +71,7 @@ pipeline {
         stage('Deploy Application') {
             steps {
                 script {
-                    OpenShiftHelper.deployDeployment(this, PROJECT, IMAGE, APP_NAME, APP_DEPLOYMENT)
+                    OpenShiftHelper.deployDeployment(this, PROJECT, IMAGE_NAME, APP_NAME, APP_DEPLOYMENT)
                 }
             }
         }
